@@ -10,35 +10,6 @@ import 'dart:ffi' as ffi;
 import 'package:objective_c/objective_c.dart' as objc;
 import 'package:ffi/ffi.dart' as pkg_ffi;
 
-late final _class_SwiftClass = objc.getClass("swift_module.SwiftClass");
-late final _sel_isKindOfClass_ = objc.registerName("isKindOfClass:");
-final _objc_msgSend_19nvye5 = objc.msgSendPointer
-    .cast<
-      ffi.NativeFunction<
-        ffi.Bool Function(
-          ffi.Pointer<objc.ObjCObjectImpl>,
-          ffi.Pointer<objc.ObjCSelector>,
-          ffi.Pointer<objc.ObjCObjectImpl>,
-        )
-      >
-    >()
-    .asFunction<
-      bool Function(
-        ffi.Pointer<objc.ObjCObjectImpl>,
-        ffi.Pointer<objc.ObjCSelector>,
-        ffi.Pointer<objc.ObjCObjectImpl>,
-      )
-    >();
-late final _sel_sayHello = objc.registerName("sayHello");
-late final _sel_someField = objc.registerName("someField");
-late final _sel_setSomeField_ = objc.registerName("setSomeField:");
-typedef instancetype = ffi.Pointer<objc.ObjCObjectImpl>;
-typedef Dartinstancetype = objc.ObjCObject;
-late final _sel_init = objc.registerName("init");
-late final _sel_new = objc.registerName("new");
-late final _sel_allocWithZone_ = objc.registerName("allocWithZone:");
-late final _sel_alloc = objc.registerName("alloc");
-
 /// SwiftClass
 extension type SwiftClass._(objc.ObjCObject object$)
     implements objc.ObjCObject, objc.NSObject {
@@ -57,11 +28,13 @@ extension type SwiftClass._(objc.ObjCObject object$)
   }
 
   /// Returns whether [obj] is an instance of [SwiftClass].
-  static bool isA(objc.ObjCObject obj) => _objc_msgSend_19nvye5(
-    obj.ref.pointer,
-    _sel_isKindOfClass_,
-    _class_SwiftClass,
-  );
+  static bool isA(objc.ObjCObject? obj) => obj == null
+      ? false
+      : _objc_msgSend_19nvye5(
+          obj.ref.pointer,
+          _sel_isKindOfClass_,
+          _class_SwiftClass,
+        );
 
   /// alloc
   static SwiftClass alloc() {
@@ -121,6 +94,7 @@ extension SwiftClass$Methods on SwiftClass {
   }
 }
 
+late final _class_SwiftClass = objc.getClass("swift_module.SwiftClass");
 final _objc_msgSend_151sglz = objc.msgSendPointer
     .cast<
       ffi.NativeFunction<
@@ -134,6 +108,40 @@ final _objc_msgSend_151sglz = objc.msgSendPointer
       ffi.Pointer<objc.ObjCObjectImpl> Function(
         ffi.Pointer<objc.ObjCObjectImpl>,
         ffi.Pointer<objc.ObjCSelector>,
+      )
+    >();
+final _objc_msgSend_19nvye5 = objc.msgSendPointer
+    .cast<
+      ffi.NativeFunction<
+        ffi.Bool Function(
+          ffi.Pointer<objc.ObjCObjectImpl>,
+          ffi.Pointer<objc.ObjCSelector>,
+          ffi.Pointer<objc.ObjCObjectImpl>,
+        )
+      >
+    >()
+    .asFunction<
+      bool Function(
+        ffi.Pointer<objc.ObjCObjectImpl>,
+        ffi.Pointer<objc.ObjCSelector>,
+        ffi.Pointer<objc.ObjCObjectImpl>,
+      )
+    >();
+final _objc_msgSend_1cwp428 = objc.msgSendPointer
+    .cast<
+      ffi.NativeFunction<
+        ffi.Pointer<objc.ObjCObjectImpl> Function(
+          ffi.Pointer<objc.ObjCObjectImpl>,
+          ffi.Pointer<objc.ObjCSelector>,
+          ffi.Pointer<objc.NSZone>,
+        )
+      >
+    >()
+    .asFunction<
+      ffi.Pointer<objc.ObjCObjectImpl> Function(
+        ffi.Pointer<objc.ObjCObjectImpl>,
+        ffi.Pointer<objc.ObjCSelector>,
+        ffi.Pointer<objc.NSZone>,
       )
     >();
 final _objc_msgSend_1hz7y9r = objc.msgSendPointer
@@ -168,20 +176,13 @@ final _objc_msgSend_4sp4xj = objc.msgSendPointer
         int,
       )
     >();
-final _objc_msgSend_1cwp428 = objc.msgSendPointer
-    .cast<
-      ffi.NativeFunction<
-        ffi.Pointer<objc.ObjCObjectImpl> Function(
-          ffi.Pointer<objc.ObjCObjectImpl>,
-          ffi.Pointer<objc.ObjCSelector>,
-          ffi.Pointer<objc.NSZone>,
-        )
-      >
-    >()
-    .asFunction<
-      ffi.Pointer<objc.ObjCObjectImpl> Function(
-        ffi.Pointer<objc.ObjCObjectImpl>,
-        ffi.Pointer<objc.ObjCSelector>,
-        ffi.Pointer<objc.NSZone>,
-      )
-    >();
+late final _sel_alloc = objc.registerName("alloc");
+late final _sel_allocWithZone_ = objc.registerName("allocWithZone:");
+late final _sel_init = objc.registerName("init");
+late final _sel_isKindOfClass_ = objc.registerName("isKindOfClass:");
+late final _sel_new = objc.registerName("new");
+late final _sel_sayHello = objc.registerName("sayHello");
+late final _sel_setSomeField_ = objc.registerName("setSomeField:");
+late final _sel_someField = objc.registerName("someField");
+typedef instancetype = ffi.Pointer<objc.ObjCObjectImpl>;
+typedef Dartinstancetype = objc.ObjCObject;
