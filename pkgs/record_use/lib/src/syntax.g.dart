@@ -288,59 +288,6 @@ class DefinitionSyntax extends JsonObjectSyntax {
   }) : super.fromJson();
 
   DefinitionSyntax({
-    required IdentifierSyntax identifier,
-    String? loadingUnit,
-    super.path = const [],
-  }) : super() {
-    _identifier = identifier;
-    _loadingUnit = loadingUnit;
-    json.sortOnKey();
-  }
-
-  IdentifierSyntax get identifier {
-    final jsonValue = _reader.map$('identifier');
-    return IdentifierSyntax.fromJson(jsonValue, path: [...path, 'identifier']);
-  }
-
-  set _identifier(IdentifierSyntax value) {
-    json['identifier'] = value.json;
-  }
-
-  List<String> _validateIdentifier() {
-    final mapErrors = _reader.validate<Map<String, Object?>>('identifier');
-    if (mapErrors.isNotEmpty) {
-      return mapErrors;
-    }
-    return identifier.validate();
-  }
-
-  String? get loadingUnit => _reader.get<String?>('loading_unit');
-
-  set _loadingUnit(String? value) {
-    json.setOrRemove('loading_unit', value);
-  }
-
-  List<String> _validateLoadingUnit() =>
-      _reader.validate<String?>('loading_unit');
-
-  @override
-  List<String> validate() => [
-    ...super.validate(),
-    ..._validateIdentifier(),
-    ..._validateLoadingUnit(),
-  ];
-
-  @override
-  String toString() => 'DefinitionSyntax($json)';
-}
-
-class IdentifierSyntax extends JsonObjectSyntax {
-  IdentifierSyntax.fromJson(
-    super.json, {
-    super.path = const [],
-  }) : super.fromJson();
-
-  IdentifierSyntax({
     required String name,
     String? scope,
     required String uri,
@@ -368,13 +315,22 @@ class IdentifierSyntax extends JsonObjectSyntax {
 
   List<String> _validateScope() => _reader.validate<String?>('scope');
 
-  String get uri => _reader.get<String>('uri');
+  static final _uriPattern = RegExp(r'^package:');
+
+  String get uri => _reader.string('uri', _uriPattern);
 
   set _uri(String value) {
+    if (!_uriPattern.hasMatch(value)) {
+      throw ArgumentError.value(
+        value,
+        'value',
+        'Value does not satisify pattern: ${_uriPattern.pattern}.',
+      );
+    }
     json.setOrRemove('uri', value);
   }
 
-  List<String> _validateUri() => _reader.validate<String>('uri');
+  List<String> _validateUri() => _reader.validateString('uri', _uriPattern);
 
   @override
   List<String> validate() => [
@@ -385,7 +341,7 @@ class IdentifierSyntax extends JsonObjectSyntax {
   ];
 
   @override
-  String toString() => 'IdentifierSyntax($json)';
+  String toString() => 'DefinitionSyntax($json)';
 }
 
 class InstanceSyntax extends JsonObjectSyntax {
@@ -874,12 +830,12 @@ class RecordingSyntax extends JsonObjectSyntax {
 
   RecordingSyntax({
     List<CallSyntax>? calls,
-    required DefinitionSyntax definition,
+    required DefinitionSyntax identifier,
     List<InstanceSyntax>? instances,
     super.path = const [],
   }) : super() {
     _calls = calls;
-    _definition = definition;
+    _identifier = identifier;
     _instances = instances;
     json.sortOnKey();
   }
@@ -918,21 +874,21 @@ class RecordingSyntax extends JsonObjectSyntax {
     return [for (final element in elements) ...element.validate()];
   }
 
-  DefinitionSyntax get definition {
-    final jsonValue = _reader.map$('definition');
-    return DefinitionSyntax.fromJson(jsonValue, path: [...path, 'definition']);
+  DefinitionSyntax get identifier {
+    final jsonValue = _reader.map$('identifier');
+    return DefinitionSyntax.fromJson(jsonValue, path: [...path, 'identifier']);
   }
 
-  set _definition(DefinitionSyntax value) {
-    json['definition'] = value.json;
+  set _identifier(DefinitionSyntax value) {
+    json['identifier'] = value.json;
   }
 
-  List<String> _validateDefinition() {
-    final mapErrors = _reader.validate<Map<String, Object?>>('definition');
+  List<String> _validateIdentifier() {
+    final mapErrors = _reader.validate<Map<String, Object?>>('identifier');
     if (mapErrors.isNotEmpty) {
       return mapErrors;
     }
-    return definition.validate();
+    return identifier.validate();
   }
 
   List<InstanceSyntax>? get instances {
@@ -973,7 +929,7 @@ class RecordingSyntax extends JsonObjectSyntax {
   List<String> validate() => [
     ...super.validate(),
     ..._validateCalls(),
-    ..._validateDefinition(),
+    ..._validateIdentifier(),
     ..._validateInstances(),
   ];
 

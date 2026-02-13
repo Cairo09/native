@@ -237,7 +237,7 @@
         }
       ]
     },
-    "Identifier": {
+    "Definition": {
       "type": "object",
       "properties": {
         "name": {
@@ -247,7 +247,8 @@
           "type": "string"
         },
         "uri": {
-          "type": "string"
+          "type": "string",
+          "pattern": "^package:"
         }
       },
       "required": [
@@ -393,19 +394,8 @@
             "$ref": "#/definitions/Call"
           }
         },
-        "definition": {
-          "type": "object",
-          "properties": {
-            "identifier": {
-              "$ref": "#/definitions/Identifier"
-            },
-            "loading_unit": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "identifier"
-          ]
+        "identifier": {
+          "$ref": "#/definitions/Definition"
         },
         "instances": {
           "type": "array",
@@ -415,7 +405,7 @@
         }
       },
       "required": [
-        "definition"
+        "identifier"
       ]
     }
   }
