@@ -15,9 +15,7 @@ void main() {
       ],
       'recordings': [
         {
-          'definition': {
-            'identifier': {'uri': 'package:a/a.dart', 'name': 'foo'},
-          },
+          'identifier': {'uri': 'package:a/a.dart', 'name': 'foo'},
           'calls': [
             {
               'type': 'with_arguments',
@@ -31,8 +29,8 @@ void main() {
     };
 
     final recordings = Recordings.fromJson(json);
-    const identifier = Identifier(importUri: 'package:a/a.dart', name: 'foo');
-    final calls = recordings.calls[identifier]!;
+    const definition = Definition('package:a/a.dart', [Name('foo')]);
+    final calls = recordings.calls[definition]!;
     final call = calls[0] as CallWithArguments;
 
     expect(call.positionalArguments, hasLength(3));
@@ -47,11 +45,10 @@ void main() {
   });
 
   test('MaybeConstant serialization round-trip', () {
-    const identifier = Identifier(importUri: 'package:a/a.dart', name: 'foo');
-    const definition = Definition(identifier: identifier, loadingUnit: '1');
+    const definition = Definition('package:a/a.dart', [Name('foo')]);
     final recordings = Recordings(
       metadata: Metadata(version: version, comment: 'test'),
-      callsForDefinition: {
+      calls: {
         definition: [
           const CallWithArguments(
             positionalArguments: [
@@ -68,7 +65,7 @@ void main() {
           ),
         ],
       },
-      instancesForDefinition: {},
+      instances: {},
     );
 
     final json = recordings.toJson();
@@ -86,12 +83,11 @@ void main() {
   });
 
   test('allowPromotionOfUnsupported semantic equality', () {
-    const identifier = Identifier(importUri: 'package:a/a.dart', name: 'foo');
-    const definition = Definition(identifier: identifier, loadingUnit: '1');
+    const definition = Definition('package:a/a.dart', [Name('foo')]);
 
     final actualRecordings = Recordings(
       metadata: Metadata(version: version, comment: 'actual'),
-      callsForDefinition: {
+      calls: {
         definition: [
           const CallWithArguments(
             positionalArguments: [IntConstant(42)],
@@ -100,12 +96,12 @@ void main() {
           ),
         ],
       },
-      instancesForDefinition: {},
+      instances: {},
     );
 
     final expectedRecordings = Recordings(
       metadata: Metadata(version: version, comment: 'expected'),
-      callsForDefinition: {
+      calls: {
         definition: [
           const CallWithArguments(
             positionalArguments: [UnsupportedConstant('Record')],
@@ -114,7 +110,7 @@ void main() {
           ),
         ],
       },
-      instancesForDefinition: {},
+      instances: {},
     );
 
     // Should not match by default.
