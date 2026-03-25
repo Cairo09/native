@@ -7,7 +7,7 @@ import '../clang_bindings/clang_bindings.dart' as clang_types;
 import '../utils.dart';
 
 /// Parses a C++ class declaration and logs its methods.
-///implementation for C++ parser support: discover classes,
+///sample implementation for C++ parser support: discover classes,
 /// inspect methods, and print method signatures.
 void parseClassDeclaration(Context context, clang_types.CXCursor classCursor) {
   final logger = context.logger;
