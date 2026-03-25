@@ -6,6 +6,7 @@ import '../code_generator.dart';
 import '../context.dart';
 import 'clang_bindings/clang_bindings.dart' as clang_types;
 import 'sub_parsers/functiondecl_parser.dart';
+import 'sub_parsers/cxx_class_parser.dart';
 import 'sub_parsers/macro_parser.dart';
 import 'sub_parsers/objccategorydecl_parser.dart';
 import 'sub_parsers/objcprotocoldecl_parser.dart';
@@ -31,6 +32,9 @@ Set<Binding> parseTranslationUnit(
         switch (clang.clang_getCursorKind(cursor)) {
           case clang_types.CXCursorKind.CXCursor_FunctionDecl:
             bindings.addAll(parseFunctionDeclaration(context, cursor));
+            break;
+          case clang_types.CXCursorKind.CXCursor_ClassDecl:
+            parseClassDeclaration(context, cursor);
             break;
           case clang_types.CXCursorKind.CXCursor_StructDecl:
           case clang_types.CXCursorKind.CXCursor_UnionDecl:
