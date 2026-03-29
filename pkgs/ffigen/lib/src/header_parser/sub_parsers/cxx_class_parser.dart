@@ -6,17 +6,17 @@ import '../../context.dart';
 import '../clang_bindings/clang_bindings.dart' as clang_types;
 import '../utils.dart';
 
-/// Parses a C++ class declaration and logs its methods.
-///sample implementation for C++ parser support: discover classes,
-/// inspect methods, and print method signatures.
-void parseClassDeclaration(Context context, clang_types.CXCursor classCursor) {
+void parseClassDeclaration(
+  Context context,
+  clang_types.CXCursor classCursor,
+) {
   final logger = context.logger;
   final className = classCursor.spelling();
   if (className.isEmpty) {
     return;
   }
 
-  final methodSignatures = <String>[];
+  final methodDescriptions = <String>[];
 
   classCursor.visitChildren((child) {
     final kind = clang.clang_getCursorKind(child);
@@ -35,13 +35,19 @@ void parseClassDeclaration(Context context, clang_types.CXCursor classCursor) {
       args.add(argName.isEmpty ? argType : '$argType $argName');
     }
 
-    methodSignatures.add('$returnType $methodName(${args.join(', ')})');
+    final methodNumber = methodDescriptions.length + 1;
+    methodDescriptions.add(
+      'method $methodNumber: name=$methodName, return type=$returnType, '
+      'parameters=[${args.join(', ')}]',
+    );
   });
 
-  if (methodSignatures.isNotEmpty) {
+  if (methodDescriptions.isNotEmpty) {
     logger.info(
-      'Parsed C++ class `$className` with methods:\n'
-      '  - ${methodSignatures.join('\n  - ')}',
+      'class name: $className has methods:\n'
+      '  ${methodDescriptions.join('\n  ')}',
     );
+  } else {
+    logger.info('class name: $className has no CXX methods.');
   }
 }
